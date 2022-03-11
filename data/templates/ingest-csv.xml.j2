@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+    <property>
+        <name>file.input.format</name>
+        <value>datawave.ingest.csv.mr.input.CSVFileInputFormat</value>
+    </property>
+
+    <property>
+        <name>data.name</name>
+        <value>{{ datatypeName }}</value>
+        <description>This is the name of the datatype, which distinguishes it from other types for the purposes of ingest
+            processing and perhaps even for dataflow/transport concerns. As such, this can be used to denote a subtype of
+            some common data format, like CSV files for example, which could originate from any number of sources
+        </description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.output.name</name>
+        <value>{{ datatypeName }}</value>
+        <description>This is the name to use on the data in Accumulo. If not specified, 'data.name' is used by default
+        </description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.ingest.policy.enforcer.class</name>
+        <value>datawave.policy.ExampleIngestPolicyEnforcer</value>
+        <description>Name of the class to use for record-level policy enforcement.
+            (1) datawave.policy.IngestPolicyEnforcer$NoOpIngestPolicyEnforcer will assume all records are valid.
+            (2) datawave.policy.ExampleIngestPolicyEnforcer will perform some validations that you'd probably want
+            to enforce in a production deployment
+        </description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.ingest.helper.class</name>
+        <value>datawave.ingest.csv.config.helper.ExtendedCSVIngestHelper</value>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.reader.class</name>
+        <value>datawave.ingest.csv.mr.input.CSVRecordReader</value>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.handler.classes</name>
+        <value>datawave.ingest.csv.mr.handler.ContentCSVColumnBasedHandler</value>
+        <description>List of classes that should process this event</description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.event.validators</name>
+        <value></value>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.ingest.ignorable.error.helpers</name>
+        <value>datawave.ingest.data.config.ingest.IgnorableFatalErrorHelper</value>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.data.separator</name>
+        <value>{{ separatorCharacter }}</value>
+        <description>This is the separator to use for delimited text, and between configuration file parameters with multiple values.
+        </description>
+    </property>
+
+    <!-- TODO: Template -->
+    <property>
+        <name>{{ datatypeName }}.data.category.marking.default</name>
+        <value>{{ columnVisibility | upper }}</value>
+        <description>Default ColumnVisibility to be applied to fields/records if none provided in the data</description>
+    </property>
+
+    <!-- TODO Template -->
+    <property>
+        <name>{{ datatypeName }}.data.header</name>
+        <value>
+        {%- for field in header -%}
+            {{ field | upper }}
+            {%- if not loop.last -%}
+            ,
+            {%- endif %}
+        {%- endfor -%}
+        </value>
+        <description>These are the fields in the raw data (delimited by separator).</description>
+    </property>
+
+    <!-- TODO: template -->
+    <property>
+        <name>{{ datatypeName }}.skip.csv.header.row</name>
+        <value>{{ skipHeaderRow }}</value>
+        <description>Parameter to specify that the csv file contains a header row and that we should skip it</description>
+    </property>
+
+    <!-- TODO: Might need to keep -->
+    <!-- 
+    <property>
+        <name>{{ datatypeName }}.data.category.uuid.fields</name>
+        <value>PTID</value>
+        <description>List of fields that contain UUIDs</description>
+    </property> -->
+
+    <!-- TODO: template -->
+    <property>
+        <name>{{ datatypeName }}.data.category.index</name>
+        <value>
+        {%- for field in indexFields -%}
+            {{ field | upper }}
+            {%- if not loop.last -%}
+            ,
+            {%- endif %}
+        {%- endfor -%}
+        </value>
+        <description>Comma-delimited list of fields names that we want to have forward indexed in order to make them searchable via the query api</description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.data.category.token.fieldname.designator.enabled</name>
+        <value>false</value>
+        <description>whether token fields should be named differently than their source fields</description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.verbose.shard.counters</name>
+        <value>false</value>
+        <description>In the MapReduce ingest jobs, whether or not to increment
+            counters for each "target" shard data will be loaded to. Warning:
+            this is rather expensive and should not be 'true' for production
+        </description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.verbose.term.size.counters</name>
+        <value>false</value>
+        <description>In the MapReduce ingest jobs, whether or not to increment
+            counters for the various term sizes. Warning: this is rather
+            expensive and should not be 'true' for production
+        </description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.verbose.term.index.counters</name>
+        <value>false</value>
+        <description>In the MapReduce ingest jobs, whether or not to increment
+            counters for the various term types. Warning: this is rather
+            expensive and should not be 'true' for production
+        </description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.verbose.term.index.counters</name>
+        <value>true</value>
+        <description></description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.verbose.term.size.counters</name>
+        <value>true</value>
+        <description></description>
+    </property>
+
+    <property>
+        <name>{{ datatypeName }}.data.default.type.class</name>
+        <value>datawave.data.type.LcNoDiacriticsType</value>
+        <description>Default type</description>
+    </property>
+
+</configuration>
