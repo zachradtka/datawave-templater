@@ -24,6 +24,9 @@ vendor/pkg/
 pyenv
 Vagrantfile
 
-
-config.json
-data/output*
+# Ignore project specific files
+# Ignore everything in data except the config example and the contents of the template directory
+!data/
+data/*
+!data/config.json.example
+!data/templates
