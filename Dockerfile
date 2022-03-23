@@ -12,6 +12,9 @@ ARG USER_ID
 ARG GROUP_ID
 RUN groupadd --gid ${GROUP_ID} user
 RUN useradd --uid ${USER_ID} --gid ${GROUP_ID} user
+
+RUN chown -R user:user /app
+
 USER user
 
 VOLUME [ "/data" ]
